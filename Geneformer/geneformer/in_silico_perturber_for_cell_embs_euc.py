@@ -494,21 +494,19 @@ def quant_cos_sims(model,
     original_emb = torch.cat(original_emb_list)
   
     perturb_output_path = (Path(f'{output_prefix}_perturb')).with_suffix(".csv")
-    #perturb_emb_df = pd.DataFrame(torch.squeeze(perturb_emb).cpu().numpy())
     perturb_emb_df = label_embs(perturb_emb, downsampled_data, emb_label)
     perturb_emb_df.to_csv(perturb_output_path)
     
-    #original_emb_df = pd.DataFrame(torch.squeeze(original_emb).cpu().numpy())
     original_output_path = (Path(f'{output_prefix}_original')).with_suffix(".csv")
     original_emb_df = label_embs(original_emb, downsampled_data, emb_label)
     original_emb_df.to_csv(original_output_path)
 
     euclidean_perturb_vs_original = torch.squeeze((original_emb - perturb_emb)).pow(2).sum(1).sqrt()
-    #euclideans_df = pd.DataFrame(torch.squeeze(euclidean_perturb_vs_original).cpu().numpy())
     euclideans_df = label_embs(euclidean_perturb_vs_original,downsampled_data,emb_label)
     euclideans_df = euclideans_df.rename(columns={0:"euclidean_distance"})
     euclideans_output_path = (Path(f'{output_prefix}_euclidean_dists')).with_suffix(".csv")
     euclideans_df.to_csv(euclideans_output_path)        
+    
     return None
 
 
